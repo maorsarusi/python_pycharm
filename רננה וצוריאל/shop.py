@@ -58,6 +58,10 @@ class product:
         self.__selling_price = selling_price
 
     def set_num_of_sell(self, num):
+        """
+        a method that set the number of products we sell
+        :param num: the number of prosucts to set
+        """
         self.__num_of_sell = num
 
     def set_name(self, name):
