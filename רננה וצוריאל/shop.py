@@ -72,6 +72,11 @@ class product:
         self.__name = name
 
     def set_line(self, line):
+        """
+        a method that set the number of the line of product in the vcs file
+        :param line: the number to set
+        :return:
+        """
         self.__line = line
 
     def set_earning(self):
