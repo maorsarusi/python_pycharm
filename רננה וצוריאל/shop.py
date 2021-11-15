@@ -67,7 +67,7 @@ class product:
     def set_name(self, name):
         """
         a method that set the name of the product
-        :param name: the new name of hte product
+        :param name: the new name of the product
         """
         self.__name = name
 
