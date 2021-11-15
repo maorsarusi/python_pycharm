@@ -1,0 +1,44 @@
+Choose from the following options:
+f: FileDetails
+h: Hamburgers
+Choose from the following hamburgers:
+cl: classic
+sp: spicy
+la: lamb
+hm: homemade
+Choose from the following options:
+a: add topping
+s: serve
+Choose from the following toppings:
+ch: chips
+or: onion rings
+sa: salad
+fe: fried egg
+Choose from the following options:
+a: add topping
+s: serve
+Choose from the following toppings:
+ch: chips
+or: onion rings
+sa: salad
+fe: fried egg
+Choose from the following options:
+a: add topping
+s: serve
+Choose from the following toppings:
+ch: chips
+or: onion rings
+sa: salad
+fe: fried egg
+Choose from the following options:
+a: add topping
+s: serve
+Choose from the following toppings:
+ch: chips
+or: onion rings
+sa: salad
+fe: fried egg
+Choose from the following options:
+a: add topping
+s: serve
+SpicyHamburger with fried egg with salad with onion rings with chips

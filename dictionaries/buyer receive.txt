@@ -1,0 +1,5 @@
+product: Banana, amount: 3.0
+product: Apple, amount: 2.0
+product: Milk, amount: 1.0
+product: Cheese, amount: 1.0
+Total: 33.57

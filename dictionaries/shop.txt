@@ -1,0 +1,6 @@
+product: Milk, cost: 5.17
+product: Kiwi, cost: 7.9
+product: Banana, cost: 3.5
+product: Tomato, cost: 2.5
+product: Apple, cost: 4.5
+product: Cheese, cost: 8.9

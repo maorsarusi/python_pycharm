@@ -1,0 +1,10 @@
+123 + 5 = 128
+-r - 9 = wrong number
+3 * -18 = -54
+j is wrong operator
+ 15 / 5 = 3.0
+8 + t = wrong number
+22 - 30 = -8
+15 / 0 = can't divide by 0
+-8 * -8 = 64
+-9 / -3 = 3.0
