@@ -2,7 +2,7 @@ import csv
 import os
 
 """
-represents the israeli coins
+represents the israeli coin
 """
 shekels = '₪'
 
