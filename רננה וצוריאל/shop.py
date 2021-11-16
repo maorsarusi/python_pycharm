@@ -123,15 +123,23 @@ class product:
 
     def get_num_of_sell(self):
         """
-        a method to get the number of products we sell from a particular product
+        a method to get the number of products we sell from a specific product
         :return: the number of selling from some product
         """
         return self.__num_of_sell
 
     def get_num_of_buy(self):
+        """
+        a method to get the number of products we bought from a specific product
+        :return: the number of buying from some product
+
+        """
         return self.__amount_buy
 
     def print_product(self):
+        """
+        a method to print by order the product's details
+        """
         return str(self.get_earning()) + " רווח: "[::-1] + ',' + str(self.get_num_of_buy()) + " מספר פריטים שנקנו: "[
                                                                                               ::-1] + ',' + str(
             self.get_num_of_sell()) + " מספר פריטים שנמכרו: "[
@@ -146,6 +154,11 @@ class product:
 
 
 def extract_number(str):
+    """
+    a function to get a number represent by string with a shekel and get the number only
+    :param str: the string we got
+    :return: the number in float type
+    """
     if shekels in str:
         return float(str[2:])
     else:
@@ -153,6 +166,13 @@ def extract_number(str):
 
 
 def read_file():
+    """
+   a function to manage the file to a lists so we can use the details
+    :return: a tuple of two lists and one string:
+             1) the data of the file by lines
+             2) the products by objects
+             3) the path of the file
+    """
     product_list = []
     fixed_lines = []
     path = input("הכנס רק את שם הקובץ אותו תרצו לקרוא"[::-1] + "\n")
@@ -162,12 +182,12 @@ def read_file():
             with open(all_path, 'r') as csv_file:
                 lines = csv.reader(csv_file)
                 data_with_header = list(lines)
-            data = data_with_header[1:]
-            header = data_with_header[0]
+            data = data_with_header[1:] # the whole data without the titles
+            header = data_with_header[0] # the titles
             for line in data:
-                fixed_lines += [insert_zeros(line)]
+                fixed_lines += [insert_zeros(line)] # insert to places of prices zero if they are empty
             for i in fixed_lines:
-                p = product(i[0], i[1], i[2], i[3], i[4], i[5])
+                p = product(i[0], i[1], i[2], i[3], i[4], i[5]) # create an object of product
                 product_list += [p]
             fixed_lines.insert(0, header)
             break
