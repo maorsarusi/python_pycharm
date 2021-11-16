@@ -80,25 +80,52 @@ class product:
         self.__line = line
 
     def set_earning(self):
+        """
+        a method to set (calculate) the earning of the product
+        """
         self.__earning = extract_number(self.get_num_of_sell()) * extract_number(
             self.get_selling_price()) - extract_number(self.get_num_of_buy()) * extract_number(self.get_buy_price())
 
     def get_name(self):
+        """
+        a method to get the name of the product
+        :return: the product's name
+        """
         return self.__name
 
     def get_earning(self):
+        """
+        a method to get the earning of the product
+        :return: the product's earning
+        """
         return self.__earning
 
     def get_line(self):
+        """
+        a method to get the line of the product in the csv file
+        :return: the product's line in the csv file
+        """
         return self.__line
 
     def get_buy_price(self):
+        """
+        a method to get the price that we bought the product
+        :return: the product's buy price
+        """
         return self.__price
 
     def get_selling_price(self):
+        """
+        a method to get the price we want to sell the product
+        :return: the product's selling price
+        """
         return self.__selling_price
 
     def get_num_of_sell(self):
+        """
+        a method to get the number of products we sell from a particular product
+        :return: the number of selling from some product
+        """
         return self.__num_of_sell
 
     def get_num_of_buy(self):
