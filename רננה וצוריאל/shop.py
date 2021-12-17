@@ -262,21 +262,28 @@ def check_float_int(string):
         for character in string:
             if not character.isdigit():  # isn't an int either
                 return -1
-        return 0 # it's an int
+        return 0  # it's an int
     else:
         dots = find_how_many_times('.', string)
-        if len(dots) > 1: # means that it isn't a float
+        if len(dots) > 1:  # means that it isn't a float
             return -1
         else:
-            new_string = string[0:dots[0]] + string[dots[0] + 1:] # check the parts from the dot and to the dot
+            new_string = string[0:dots[0]] + string[dots[0] + 1:]  # check the parts from the dot and to the dot
             for character in new_string:
                 if not character.isdigit():
                     return -1
-            return 1 # means that it's a float
+            return 1  # means that it's a float
 
 
 def add_line(file, products, path):
-    num = str(len(file))
+    """
+    a function to add a product to the file
+    :param file: the file we have in list of lists
+    :param products: the file in list of product
+    :param path: the path of the file
+    :return: the new file and products with the new line
+    """
+    length = str(len(file))
     name = input("הכנס שם מוצר"[::-1] + "\n")
     buy = input("הכנס מחיר קנייה"[::-1] + "\n")
     while check_float_int(buy) == -1:
@@ -291,23 +298,37 @@ def add_line(file, products, path):
         print("הכנסתם ערך לא טוב נסו שנית"[::-1] + "\n")
         num_buy = input("הכנס מספר פריטים שנקנו"[::-1] + "\n")
     num_sell = '0'
-    p = product(num, name, buy, sell, num_buy, num_sell)
+    p = product(length, name, buy, sell, num_buy, num_sell)
     products += [p]
-    earning = p.get_earning()
-    line = [num, name, buy, sell, num_buy, num_sell, earning]
+    earning = p.get_earning()  # calculate and add the earning for the new line
+    line = [length, name, buy, sell, num_buy, num_sell, earning]
     file += [line]
     file = insert_shekels(file)
 
     return file, products
 
 
-def add_shekel(str):
-    return "{} {}".format(shekels, str)
+def add_shekel(string):
+    """
+    a private function to add the sign "shekel" in the string
+    :param string: the string we add to it the sign
+    :return: the new string with the sign "shekel" in it
+    """
+    return "{} {}".format(shekels, string)
 
 
 def change_line(products, file, line_num):
+    """
+    a function to change a specific line in any parameter in it
+    :param file: the file we have in list of lists
+    :param products: the file in list of product
+    :param line_num: the line we change
+    :return: the new file and products with the changed line
+
+    """
     p = None
     for prod in products:
+        # find the product represented by the line
         line = prod.get_line()
         if line == str(line_num):
             p = prod
@@ -377,8 +398,15 @@ def change_line(products, file, line_num):
 
 
 def add_earning(file, products, path):
+    """
+    a function to add the earning for a product
+     :param file: the file we have in list of lists
+    :param products: the file in list of product
+    :param path: the path of the file
+    :return: the new file and products with the earning parameter
+    """
     for i in range(len(products)):
-        if len(file[i + 1]) != 7:
+        if len(file[i + 1]) != 7:  # it means we haven't the earning parameter for this product
             file[i + 1].append(products[i].get_earning())
     with open(path, 'w', newline='') as f:
         writer = csv.writer(f)
@@ -386,21 +414,34 @@ def add_earning(file, products, path):
     return file, products
 
 
-def deleting_line(file, products, num):
+def deleting_line(file, products, line_num):
+    """
+    a function to delete a specific product
+       :param file: the file we have in list of lists
+    :param products: the file in list of product
+    :param line_num: the line we change
+    :return: the new file and products without the deleting line
+    """
     length = len(products)
-    if length < num:
+
+    # checks if we insert a wrong number
+    if length < line_num:
         print("יש רק {} שורות".format(str(length)[::-1])[::-1] + '\n')
-    elif num < 1:
+    elif line_num < 1:
         print("{}אפשר להתחיל רק מ 1".format("\n"))
     else:
-        file.pop(num)
-        products.pop(num - 1)
-        file, products = move_lines(file, products, num)
-        print(" נמחקה בהצלחה "[::-1] + str(num) + " שורה מספר: "[::-1] + "\n")
+        file.pop(line_num)
+        products.pop(line_num - 1)
+        file, products = move_lines(file, products, line_num)
+        print(" נמחקה בהצלחה "[::-1] + str(line_num) + " שורה מספר: "[::-1] + "\n")
     return file, products
 
 
 def delete_file(path):
+    """
+    a function to delete a whole file
+    :param path: the path of the deleting file
+    """
     insurance = input(
         " האם אתם בטוחים? למחיקת קובץ הקישו y ליציאה הקישו כל דבר )שימו לב במחיקה שאתם על אנגלית כי זה לא ימחק אם תרשמו ט("[
         ::-1] + "\n")
@@ -413,18 +454,27 @@ def delete_file(path):
 
 
 def insert_shekels(file):
+    """
+    a function to insert the symbol "shekel" if it didn't appear where it needed
+    :param file: the file we check
+    :return: the corrected file
+    """
     for i in range(1, len(file)):
-        if shekels not in file[i][2]:
+        if shekels not in file[i][2]:  # buy
             file[i][2] = shekels + " " + file[i][2]
-        if shekels not in file[i][3]:
+        if shekels not in file[i][3]:  # sell
             file[i][3] = shekels + " " + file[i][3]
         if len(file[i]) == 7:
-            if shekels not in file[i][6]:
+            if shekels not in file[i][6]:  # earning
                 file[i][6] = shekels + " " + file[i][6]
     return file
 
 
 def print_file(products):
+    """
+    a function to print a file
+    :param products: the file in list of product
+    """
     for p in products:
         print(p.print_product())
 
