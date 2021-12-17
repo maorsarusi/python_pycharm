@@ -145,24 +145,22 @@ class product:
             self.get_num_of_sell()) + " מספר פריטים שנמכרו: "[
                                       ::-1] + ',' + str(self.get_selling_price()) + " מחיר מכירה: "[
                                                                                     ::-1] + ',' + str(
-            self.get_buy_price()) + " מחיר קנייה: "[
-                                    ::-1] + ',' + self.get_name()[
-                                                  ::-1] + " (" + str(self.get_line())
+            self.get_buy_price()) + " מחיר קנייה: "[::-1] + ',' + self.get_name()[::-1] + " (" + str(self.get_line())
 
     def print_earning(self):
         return "{}) {} : {} shekels".format(self.get_line(), self.get_name(), self.get_earning())
 
 
-def extract_number(str):
+def extract_number(string):
     """
     a function to get a number represent by string with a shekel and get the number only
-    :param str: the string we got
+    :param string: the string we got
     :return: the number in float type
     """
-    if shekels in str:
-        return float(str[2:])
+    if shekels in string:
+        return float(string[2:])
     else:
-        return float(str)
+        return float(string)
 
 
 def read_file():
@@ -182,12 +180,12 @@ def read_file():
             with open(all_path, 'r') as csv_file:
                 lines = csv.reader(csv_file)
                 data_with_header = list(lines)
-            data = data_with_header[1:] # the whole data without the titles
-            header = data_with_header[0] # the titles
+            data = data_with_header[1:]  # the whole data without the titles
+            header = data_with_header[0]  # the titles
             for line in data:
-                fixed_lines += [insert_zeros(line)] # insert to places of prices zero if they are empty
+                fixed_lines += [insert_zeros(line)]  # insert to places of prices zero if they are empty
             for i in fixed_lines:
-                p = product(i[0], i[1], i[2], i[3], i[4], i[5]) # create an object of product
+                p = product(i[0], i[1], i[2], i[3], i[4], i[5])  # create an object of product
                 product_list += [p]
             fixed_lines.insert(0, header)
             break
@@ -198,6 +196,11 @@ def read_file():
 
 
 def insert_zeros(line):
+    """
+    a function that inserts to an empty place un a specific line a zero
+    :param line: the line to insert the zeros
+    :return: the new line with the zeros
+    """
     for i in range(len(line)):
         if line[i] == '':
             line[i] = '0'
@@ -205,47 +208,71 @@ def insert_zeros(line):
 
 
 def write_new_file(file):
-    num = "שקל וחצי פלוס "
-    num += input("הכנס את שם הקובץ הרצוי"[::-1] + "\n")
-    name = "{}.csv".format(num)
-    if os.path.exists(name):
+    """
+    a function to write a copy to a file
+    :param file: the file to copy
+    """
+    name = "שקל וחצי פלוס "
+    name += input("הכנס את שם הקובץ הרצוי"[::-1] + "\n")  # the file name will be "שקל וחצי פלוס" + the name wr gave
+    whole_name = "{}.csv".format(name)
+    if os.path.exists(whole_name):
         print("שם לא קיים"[::-1] + '\n')
         return
-    with open(name, 'w', newline='') as f:
+    with open(whole_name, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerows(file)
-    num = num[::-1]
-    print("רצונ {} ץבוק".format("{}.csv".format(num)))
+    name = name[::-1]
+    print("רצונ {} ץבוק".format("{}.csv".format(name)))
 
 
 def move_lines(file, products, num):
-    for prod in products[num - 1:]:
+    """
+    a private function to arrange the lines of product after a product has been deleted
+    :param file: the file we have in list of lists
+    :param products: the file in list of products
+    :param num: the number of the line we need to delete
+    :return: the new file and products arranged by the new order after the deleting
+    """
+    for prod in products[num - 1:]:  # the products form the wanted to delete product down in product list
         prod.set_line(int(prod.get_line()) - 1)
-    for prod in file[num:]:
+    for prod in file[num:]:  # the products form the wanted to delete product down in file list
         prod[0] = str(int(prod[0]) - 1)
     return file, products
 
 
-def find_how_many_times(chr, string):
-    return [i for i in range(len(string)) if string[i] == chr]
+def find_how_many_times(character, string):
+    """
+    a private function to find how many times a character appears in a string
+    :param character: the character to find
+    :param string: the string to search in
+    :return: a list with the all places that's the character appears in the string
+    """
+    return [i for i in range(len(string)) if string[i] == character]
 
 
 def check_float_int(string):
-    if '.' not in string:
-        for chr in string:
-            if not chr.isdigit():
+    """
+    a function to check if a string is an int or a float(double)
+    :param string: the string we check
+    :return: -1 if it isn't a float or an int
+              0 if it an int
+              1 if it a float
+    """
+    if '.' not in string:  # can't be a float
+        for character in string:
+            if not character.isdigit():  # isn't an int either
                 return -1
-        return 0
+        return 0 # it's an int
     else:
         dots = find_how_many_times('.', string)
-        if len(dots) > 1:
+        if len(dots) > 1: # means that it isn't a float
             return -1
         else:
-            new_string = string[0:dots[0]] + string[dots[0] + 1:]
-            for chr in new_string:
-                if not chr.isdigit():
+            new_string = string[0:dots[0]] + string[dots[0] + 1:] # check the parts from the dot and to the dot
+            for character in new_string:
+                if not character.isdigit():
                     return -1
-            return 1
+            return 1 # means that it's a float
 
 
 def add_line(file, products, path):
@@ -264,7 +291,7 @@ def add_line(file, products, path):
         print("הכנסתם ערך לא טוב נסו שנית"[::-1] + "\n")
         num_buy = input("הכנס מספר פריטים שנקנו"[::-1] + "\n")
     num_sell = '0'
-    p = product(num, product, buy, sell, num_buy, num_sell)
+    p = product(num, name, buy, sell, num_buy, num_sell)
     products += [p]
     earning = p.get_earning()
     line = [num, name, buy, sell, num_buy, num_sell, earning]
@@ -350,8 +377,6 @@ def change_line(products, file, line_num):
 
 
 def add_earning(file, products, path):
-    if "חוור" not in file[0]:
-        file[0].append("חוור")
     for i in range(len(products)):
         if len(file[i + 1]) != 7:
             file[i + 1].append(products[i].get_earning())

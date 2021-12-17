@@ -3,8 +3,9 @@ def secret(word):
     for i in range(1, 10):
         print(i)
         if i < len(word):
-          ascii_inp += ord(word[i])
+            ascii_inp += ord(word[i])
     return ascii_inp
+
 
 def main():
     inp = input("Magic word: ")
@@ -19,7 +20,6 @@ def main():
     else:
         print("")
     return
-
 
 
 if __name__ == "__main__":
