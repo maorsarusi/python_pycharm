@@ -275,12 +275,11 @@ def check_float_int(string):
             return 1  # means that it's a float
 
 
-def add_line(file, products, path):
+def add_line(file, products):
     """
     a function to add a product to the file
     :param file: the file we have in list of lists
     :param products: the file in list of product
-    :param path: the path of the file
     :return: the new file and products with the new line
     """
     length = str(len(file))
@@ -480,30 +479,30 @@ def print_file(products):
 
 
 def main():
-    file, products, path = read_file()
+    file, products, path = read_file()  # gets the file by lists and products and its path
     file = insert_shekels(file)
     file, products = add_earning(file, products, path)
 
     while True:
-        num = input("{}הקש מספר פעולה".format("\n")[::-1] +
-                    "{}ליציאה הקש 0".format("\n")[::-1] +
-                    "{}להעתיק את הקובץ לקובץ נוסף הקש 1".format("\n")[::-1] +
-                    "{}להוסיף שורה הקש 2".format("\n")[::-1] +
-                    "{}לשנות שורה הקש 3".format("\n")[::-1] +
-                    '{}למחוק שורה הקש 4'.format("\n")[::-1] +
-                    "{}להדפיס שורה כלשהי הקש 5".format("\n")[::-1] +
-                    "{}למחוק את הקובץ הקש 6".format("\n")[::-1] +
-                    "{}להדפיס את הקובץ הקש 7".format("\n")[::-1])
-        if num == '0':
+        operation = input("{}הקש מספר פעולה".format("\n")[::-1] +
+                          "{}ליציאה הקש 0".format("\n")[::-1] +
+                          "{}להעתיק את הקובץ לקובץ נוסף הקש 1".format("\n")[::-1] +
+                          "{}להוסיף שורה הקש 2".format("\n")[::-1] +
+                          "{}לשנות שורה הקש 3".format("\n")[::-1] +
+                          '{}למחוק שורה הקש 4'.format("\n")[::-1] +
+                          "{}להדפיס שורה כלשהי הקש 5".format("\n")[::-1] +
+                          "{}למחוק את הקובץ הקש 6".format("\n")[::-1] +
+                          "{}להדפיס את הקובץ הקש 7".format("\n")[::-1])
+        if operation == '0':  # exit
             break
-        elif num == '1':
+        elif operation == '1':  # copy file
             write_new_file(file)
-        elif num == '2':
-            file, products = add_line(file, products, path)
+        elif operation == '2':  # add line
+            file, products = add_line(file, products)
             with open(path, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerows(file)
-        elif num == '3':
+        elif operation == '3':  # change line
             num = input("{}הכנס מספר שורה שתרצו לשנות".format("\n")[::-1])
             print_num = int(num)
             while print_num > len(products) or print_num < 1:
@@ -516,23 +515,23 @@ def main():
             with open(path, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerows(file)
-        elif num == '4':
-            num = input("{}הכניסו מספר שורה שתרצו למחוק".format("\n")[::-1])
-            while check_float_int(num) != 0:
+        elif operation == '4':  # deleting line
+            operation = input("{}הכניסו מספר שורה שתרצו למחוק".format("\n")[::-1])
+            while check_float_int(operation) != 0:
                 print("{}טעות בהקלדה".format("\n")[::-1])
-                num = input("{}הכניסו מספר שורה שתרצו למחוק".format("\n")[::-1])
-            file, products = deleting_line(file, products, int(num))
+                operation = input("{}הכניסו מספר שורה שתרצו למחוק".format("\n")[::-1])
+            file, products = deleting_line(file, products, int(operation))
             with open(path, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerows(file)
-        elif num == '5':
+        elif operation == '5':  # show one line
             line = int(input("{}הכניסו מספר שורה אותה תרצו לראות".format("\n")[::-1]))
             while line > len(products) or line < 1:
                 line = int(input("{}שורה לא קיימת נסו שוב".format("\n")[::-1]))
             print(products[line - 1].print_product())
-        elif num == '6':
+        elif operation == '6':  # deleting file
             delete_file(path)
-        elif num == '7':
+        elif operation == '7':  # print file
             print_file(products)
         else:
             print("{}לא טוב בשביל התפריט, נסו שוב".format("\n")[::-1])
