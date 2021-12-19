@@ -1,0 +1,38 @@
+
+a: 
+ע"פ הנתונים שניתנו לנו עומק העץ רגע הוא 5
+clf.max_depth = 5
+
+b: 
+accuracy:
+נכתוב את השורות הבאות:accuracy = cross_val_score(clf, iris.data, iris.target, scoring='accuracy', cv=10)
+print("Average Accuracy of  DT with depth ", clf.max_depth, " is: ", round(accuracy.mean(),3))
+ונקבל:Average Accuracy of  DT with depth  5  is:  0.953
+כלומר ממוצע הדיוק בעומק 5 הוא 0.953
+
+precision:
+נכתוב את השורות הבאות:
+precision = cross_val_score(clf, iris.data, iris.target, scoring='precision_weighted', cv=10)
+print("Average precision_weighted of  DT with depth ", clf.max_depth, " is: ", round(precision.mean(),3))
+ונקבל:Average precision_weighted of  DT with depth  5  is:  0.959
+כלומר ממוצע מדד הprecision  בעץ בגובה 5 הוא 0.959
+
+c:
+
+f1 score:
+ נוסיף את השורות הבאותf1score = cross_val_score(clf, iris.data, iris.target, scoring='f1_weighted', cv=10)
+print("Average f1 score of  DT with depth ", clf.max_depth, " is: ", round(f1score.mean(),3))
+ונקבל:Average f1 score of  DT with depth  5  is:  0.953
+כלומר  ממוצע מדד זה בעץ בעומק 5 הוא 0.953
+
+recall:
+נוסיף את השורות הבאות: recall = cross_val_score(clf, iris.data, iris.target, scoring='recall_weighted', cv=10)
+print("Average recall of  DT with depth ", clf.max_depth, " is: ", round(recall.mean(),3))
+ונקבל:Average recall of  DT with depth  5  is:  0.953
+כלומר הממוצע של מדד זה בעץ בעומק של 5 הוא 0.953
+
+הבנתי שגם פה זה רנדומלי בהדפסה אחרת שהדפסתי היה לי:
+Average Accuracy of  DT with depth  5  is:  0.96
+Average precision_weighted of  DT with depth  5  is:  0.959
+Average f1 score of  DT with depth  5  is:  0.953
+Average recall of  DT with depth  5  is:  0.96

@@ -1,0 +1,55 @@
+הקוד הוא:
+
+iris = datasets.load_iris()
+clf = tree.DecisionTreeClassifier()
+clf.criterion = 'entropy'
+clf = clf.fit(iris.data, iris.target)
+
+
+wine = datasets.load_wine()
+clf1 = tree.DecisionTreeClassifier()
+clf1.criterion = 'entropy'
+clf1 = clf1.fit(wine.data, wine.target)
+
+
+digits = datasets.load_digits()
+clf2 = tree.DecisionTreeClassifier()
+clf2.criterion = 'entropy'
+clf2 = clf2.fit(digits.data, digits.target)
+
+
+accIrisList = []
+accWineList = []
+accDigitsList = []
+for i in range(1,11):
+    clf.max_depth = i
+    clf1.max_depth = i
+    clf2.max_depth = i
+    accIris = cross_val_score(clf, iris.data, iris.target, scoring='accuracy', cv=10)
+    accWine= cross_val_score(clf, wine.data, wine.target, scoring='accuracy', cv=10)
+    accDigits = cross_val_score(clf, digits.data, digits.target, scoring='accuracy', cv=10)
+    accIrisList.append(accIris.mean())
+    accWineList.append(accWine.mean())
+    accDigitsList.append(accDigits.mean())
+
+maxIris = [max(accIrisList)]
+maxWine = [max(accWineList)]
+maxDigits = [max(accDigitsList)]
+for i in range(10):
+    if maxIris[0] == accIrisList[i]:
+        maxIris.append(i+1)
+    if maxWine[0] == accWineList[i]:
+        maxWine.append(i+1)
+    if maxDigits[0] == accDigitsList[i]:
+       maxDigits.append(i+1)
+       
+print("the max avarage for iris accuracy stock is",maxIris[0],"and it is found in depth:",maxIris[1:])       
+  
+print("the max avarage for wine accuracy stock is",maxWine[0],"and it is found in depth:",maxWine[1:])
+
+print("the max avarage for digits accuracy stock is",maxDigits[0],"and it is found in depth:",maxDigits[1:])        
+    
+והפלט:
+the max avarage for iris accuracy stock is 0.96 and it is found in depth: [3, 4, 5]
+the max avarage for wine accuracy stock is 0.9153594771241831 and it is found in depth: [7]
+the max avarage for digits accuracy stock is 0.8241464928615766 and it is found in depth: [10]
