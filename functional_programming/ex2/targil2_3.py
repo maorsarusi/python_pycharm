@@ -27,12 +27,13 @@ def checkValue():
     :return: the number
     """
     num = input("Enter an integer number" + "\n")
+    if num[0] == '-':
+        num = num[1:]
     while not num.isdigit():
-        if num[0] != "-":
             print("must be an integer" + "\n")
             num = input("Enter an integer number" + "\n")
     else:
-            return int(num)
+        return int(num)
 
 
 # תוכנית ראשית

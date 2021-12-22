@@ -45,7 +45,7 @@ def printing(i):
 
 #
 def program1():
-    x = checkValue()
+    x = abs(checkValue())
     printing(x)
 
 
