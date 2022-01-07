@@ -1,5 +1,10 @@
 from sympy import isprime
-import sys
+
+label_dictionary = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5}
+operators_dictionary = {0: '', 1: "+", 2: '-', '': 0, '+': 1, '-': 2, "GOTO": 3}
+parameters_dictionary = {'Y': 1, 'X': 2, 'Z': 3}
+
+not_equal = "≠"
 
 
 def calculate_formula(x, y):
@@ -103,15 +108,214 @@ def decomposition_by_formula(number):
             x += 1
             number //= 2
     y = number // 2
-    return x, y
+    return arrange_format(x, y)
+
+
+def arrange_format(x, y):
+    """
+    a function to get the format <x, y>
+    :param x: the right parameter
+    :param y: the left parameter
+    :return:  <x, y>
+    """
+    return "<{},{}>".format(x, y)
+
+
+def extract_from_format_2(code):
+    """
+    a function to get the numbers of the format
+    :param code: the format
+    :return: the numbers extracting from the format <x, y>
+    """
+    code = remove_edges(code)
+    splitting = code.split(",")
+    x = splitting[0]
+    y = splitting[1]
+    return int(x), int(y)
+
+
+def extract_from_format_3(code):
+    """
+    a function to get the 3 numbers from the pattern <a,<b,c>>
+    :param code: the pattern
+    :return: a tuple with a, b, c
+    """
+    code = remove_edges(code)
+    splitting = code.split(",")
+    a = int(splitting[0])
+    b_c = "{},{}".format(splitting[1], splitting[2])
+    b, c = extract_from_format_2(b_c)
+    return a, b, c
+
+
+def r(z):
+    """
+    a function to get the right value in the pair <x,y>
+    :param z: the pair
+    :return: the y
+    """
+    return extract_from_format_2(z)[1]
+
+
+def l(z):
+    """
+     a function to get the left value in the pair <x,y>
+    :param z: the pair
+    :return: the x
+    """
+    return extract_from_format_2(z)[0]
+
+
+def remove_edges(code):
+    """
+    a function to remove the first character and the last character of the string
+    :param code: the string
+    :return: the code without the first character and the last character
+    """
+    return code[1:-1]
+
+
+def from_line_to_pattern(line):
+    """
+    a function that gets a line and became it to the pattern <a,<b,c>>
+    :param line: the line from the program
+    :return: the coding of the line by the pattern <a,<b,c>>
+    """
+    split_line = line.split()
+    x = split_line[0]
+    if '[' in split_line[0] or ']' in split_line[0]:
+        label = remove_edges(split_line[0])
+        split_label = [i for i in label]
+        if len(split_label) == 1 or split_label[1] == '1':
+            a = label_dictionary[label]
+        else:
+            a = label_dictionary[split_label[0]] + (int(split_label[1]) - 1) * 5
+
+    else:
+        a = 0
+    if '+' not in split_line and '-' not in split_line:
+        if "GOTO" in split_line:
+            b = operators_dictionary["GOTO"]
+        else:
+            b = operators_dictionary['']
+    else:
+        if '+' in split_line:
+            b = operators_dictionary['+']
+        else:
+            b = operators_dictionary['-']
+    parameter = split_line[split_line.index('<-') - 1]
+    if len(parameter) == 1:
+        c = parameters_dictionary[parameter[0]]
+    else:
+        if parameter[0] == 'X':
+            c = (int(parameter[1]) * 2)
+        elif parameter[0] == 'Z':
+            c = (int(parameter[1]) * 2 + 1)
+    c -= 1
+    return arrange_format(a, arrange_format(b, c))
+
+
+def get_key(val, dictionary):
+    """
+    a function to get the key of a value in dictionary
+    :param val: the value we looks its key
+    :param dictionary: the dictionary
+    :return: the key if the value is existed
+    """
+    for key, value in dictionary.items():
+        if val == value:
+            return key
+    return None
+
+
+def get_label(number):
+    label = ""
+    if number != 0:  # there is a label in the line
+        num = number % 5
+        if num != 0:  # its not E
+            label = get_key(num, label_dictionary)
+            rest = number - num
+            val = rest // 5 + 1
+            if val != 1:
+                label += str(val)
+        else:
+            num = number // 5
+            label = 'E'
+            if num != 1:
+                label += str(num)
+    return label
+
+
+def build_line(label, parameter, operator):
+    """
+    a function that build a line from all parameters
+    :param label: the label if it exist
+    :param parameter: the parameter the line use
+    :param operator: the operator or the jump label
+    :return: the line we use
+    """
+    line = ""
+    if label != '':
+        line += "[{}]".format(label)
+    if "GOTO" in operator:
+        line += "IF {} {} 0 {}".format(parameter, not_equal, operator)
+    elif operator != '':
+        line += "{} <- {} {} 1".format(parameter, parameter, operator)
+    else:
+        line += "{} <- {}".format(parameter, parameter)
+    return line
+
+
+def from_pattern_to_line(pattern):
+    """
+    a function that get the pattern <a,<b,c>>
+    and returns the line that belong to it
+    :param pattern: <a,<b,c>>
+    :return: the line
+    """
+    line = ""
+    a, b, c = extract_from_format_3(pattern)
+    label = get_label(a)
+    if label != '':
+        line += "[{}] ".format(label)
+    c += 1
+    if c == 1:
+        parameter = get_key(c, parameters_dictionary)
+    else:
+        if c > 3:
+            val = c // 3
+        else:
+            val = c
+        parameter = get_key(val, parameters_dictionary)
+        if c > 3:
+            parameter += str(val + 1)
+    if b > 2:
+        b -= 2
+        operator = "GOTO " + get_label(b)
+    else:
+        operator = operators_dictionary[b]
+    line = build_line(label, parameter, operator)
+
+    return line
 
 
 def main():
-    x, count = decomposition_into_prime(45)
+    x, count = decomposition_into_prime(352)
     print(reduce_list(x))
     print(print_number(x, count))
-    print(decomposition_by_formula(50))
-    print(calculate_formula(0, 25))
+    z = decomposition_by_formula(239)
+    print(z)
+    print(calculate_formula(34, 37))
+    print(extract_from_format_2(z))
+    print(remove_edges(z))
+    print(l(z))
+    print(r(z))
+    t = arrange_format(33, arrange_format(12, 52))
+    print(extract_from_format_3(t))
+    print(from_line_to_pattern("X1 <- X1 + 1"))
+    print(from_line_to_pattern("[D4] X3 <- X3 - 1"))
+    print(get_key(3, label_dictionary))
+    print(from_pattern_to_line("<0,<1,0>>"))
 
 
 if __name__ == '__main__':
