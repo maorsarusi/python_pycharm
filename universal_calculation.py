@@ -255,13 +255,13 @@ def build_line(label, parameter, operator):
     :return: the line we use
     """
     line = ""
-    if label != '':
+    if label != '':  # it means that we have a label
         line += "[{}]".format(label)
-    if "GOTO" in operator:
+    if "GOTO" in operator:  # the operator isn't +-
         line += "IF {} {} 0 {}".format(parameter, not_equal, operator)
     elif operator != '':
         line += "{} <- {} {} 1".format(parameter, parameter, operator)
-    else:
+    else:  # not even jump
         line += "{} <- {}".format(parameter, parameter)
     return line
 
@@ -279,17 +279,17 @@ def from_pattern_to_line(pattern):
     if label != '':
         line += "[{}] ".format(label)
     c += 1
-    if c == 1:
+    if c == 1:  # it's Y
         parameter = get_key(c, parameters_dictionary)
     else:
-        if c > 3:
+        if c > 3:  # not only X or Z
             val = c // 3
         else:
             val = c
         parameter = get_key(val, parameters_dictionary)
         if c > 3:
             parameter += str(val + 1)
-    if b > 2:
+    if b > 2:  # jump label
         b -= 2
         operator = "GOTO " + get_label(b)
     else:
@@ -297,6 +297,44 @@ def from_pattern_to_line(pattern):
     line = build_line(label, parameter, operator)
 
     return line
+
+
+def from_line_to_number(line):
+    """
+    a function that gets a line and convert it to it's number
+    :param line: the line to convert
+    :return: the number that the line is equals to
+    """
+    formula = from_line_to_pattern(line)
+    a, b, c = extract_from_format_3(formula)
+    calc_r = calculate_formula(b, c)
+    return calculate_formula(a, calc_r)
+
+
+def from_number_to_line(number):
+    formula = decomposition_by_formula(number)
+    right = decomposition_by_formula(r(formula))
+    a = l(formula)
+    b = l(right)
+    c = r(right)
+    pattern = "<{},<{},{}>>".format(a, b, c)
+    return from_pattern_to_line(pattern)
+
+
+def from_godel_to_program(number):
+    number += 1
+    godel = decomposition_into_prime(number)[0]
+    l = reduce_list(godel)
+    program = []
+    for num in l:
+        program += [from_number_to_line(num)]
+    return program
+
+def print_program(program):
+    s = ""
+    for p in program:
+        s += "{}\n".format(p)
+    return s
 
 
 def main():
@@ -315,7 +353,12 @@ def main():
     print(from_line_to_pattern("X1 <- X1 + 1"))
     print(from_line_to_pattern("[D4] X3 <- X3 - 1"))
     print(get_key(3, label_dictionary))
-    print(from_pattern_to_line("<0,<1,0>>"))
+    print(from_pattern_to_line("<0,<0,0>>"))
+    print(from_line_to_number("X1 <- X1 + 1"))
+    print(from_number_to_line(46))
+    print(from_number_to_line(10))
+    print()
+    print(print_program(from_godel_to_program(199)))
 
 
 if __name__ == '__main__':

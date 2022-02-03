@@ -1,0 +1,3 @@
+Jerusalem,3,4
+Tel Aviv,4,5
+Haifa,8,9
