@@ -475,7 +475,7 @@ def print_file(products):
     :param products: the file in list of product
     """
     for p in products:
-        print(p.print_product())
+        print('{}'.format(p.print_product().rjust(10)))
 
 
 def main():
